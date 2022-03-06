@@ -15,4 +15,4 @@ to access both run parallely.
 
 
 In the credentials
-Enter Your mail and password to work nodemailer
+Enter Your mail and password to nodemailer work
