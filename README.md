@@ -11,3 +11,8 @@ two files
 2.products
   products crud operations
 to access both run parallely.
+
+
+
+In the credentials
+Enter Your mail and password to work nodemailer
