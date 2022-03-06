@@ -41,7 +41,6 @@ sequelize.authenticate().then(()=>{
 app.listen(8001,function(){
     console.log("server started at http://localhost:8001");
 })
-x
 
 //Creating Credentials - Works if there is no table with this name
 let Credentials = sequelize.define('credentials',{
