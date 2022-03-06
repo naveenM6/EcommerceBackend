@@ -10,6 +10,7 @@ const app = express()
 app.use(express.json())
 app.use(cors());
 
+//Creating a reference to mail
 const transporter = nodemailer.createTransport ({    
     service:'gmail', 
      auth: {
@@ -18,6 +19,7 @@ const transporter = nodemailer.createTransport ({
      }
  });
 
+//Establishing a Connection with db
 let sequelize=new Sequelize(dbConfig.DB,dbConfig.USER,dbConfig.PASSWORD,{
     host:dbConfig.HOST,
     dialect:dbConfig.dialect,
@@ -29,6 +31,7 @@ let sequelize=new Sequelize(dbConfig.DB,dbConfig.USER,dbConfig.PASSWORD,{
     }
 })
 
+//Check connecting to db successfull or not
 sequelize.authenticate().then(()=>{
     console.log("---- successfully connected to the database ----");
 }).catch((err)=>{
@@ -38,7 +41,9 @@ sequelize.authenticate().then(()=>{
 app.listen(8001,function(){
     console.log("server started at http://localhost:8001");
 })
+x
 
+//Creating Credentials - Works if there is no table with this name
 let Credentials = sequelize.define('credentials',{
     empId:{
         type:Sequelize.INTEGER,
@@ -54,7 +59,7 @@ let Credentials = sequelize.define('credentials',{
 })
 
 
-
+//Creating Cart table - Works if there is no table with this name
 let Cart = sequelize.define('cart',{
     id:{
         type:Sequelize.INTEGER,
@@ -79,6 +84,8 @@ let Cart = sequelize.define('cart',{
     freezeTableName:true
 })
 
+
+//Creating Orders table - Works if there is no table with this name
 let Orders = sequelize.define('orders',{
     id:{
         type:Sequelize.INTEGER,
@@ -103,33 +110,31 @@ let Orders = sequelize.define('orders',{
     freezeTableName:true
 })
 
+//Setting a Foriegn KEY
 Cart.belongsTo(Credentials, {foreignKey: 'userId', targetKey: 'empId'});
 Orders.belongsTo(Credentials, {foreignKey:'userId', targetKey: 'empId'});
 
+//Check Table Created or not
 Cart.sync().then((data)=>{
     console.log("Cart :- ",data);
 }).catch((err)=>{
     console.log("Table Not Created Due to Some Error :- "+err);
 })
 
+//Check Table Created or not
 Credentials.sync().then((data)=>{
     console.log("Credentials",data);
 }).catch((err)=>{
     console.log("Table Not Created Due to Some Error :"+err);
 })
 
+//Check Table Created or not
 Orders.sync().then((data)=>{
     console.log("Orders",data);
 }).catch((err)=>{
     console.log("Table Not Created Due to Some Error :"+err);
 })
 
-/* Credentials.bulkCreate([
-    {UserId:"naveen6",Email:"naveen@gmail.com",PASSWORD:"onepiece@zoro"},
-    {UserId:"Soma38",Email:"soma@gmail.com",PASSWORD:"soma@38"},
-    {UserId:"Yeswanth",Email:"yesh@gmail.com",PASSWORD:"yeswanth@23"},
-    {UserId:"Sai",Email:"sai@gmail.com",PASSWORD:"sai@29"},
-]) */
  
 /* app.get('/getAllCredentials',(req,res) => {
     Credentials.findAll({raw:true}).then((data)=>{
@@ -140,8 +145,7 @@ Orders.sync().then((data)=>{
 })
  */
 
-//login
-
+// login Api
 app.post("/login",(req,res) => {
     const Op = Sequelize.Op
     userId_param = req.body.userName
@@ -170,10 +174,8 @@ app.post("/login",(req,res) => {
     })
 })
 
-//Register
-
+//Register Api
 app.post("/register",(req,res) => {
-    /* console.log(req.body); */
     const Op = Sequelize.Op
     userId_param = req.body.userId
     email_param = req.body.Email

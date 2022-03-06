@@ -9,6 +9,7 @@ const app = express()
 app.use(express.json())
 app.use(cors());
 
+//Establishin Connection
 let sequelize=new Sequelize(dbConfig.DB,dbConfig.USER,dbConfig.PASSWORD,{
     host:dbConfig.HOST,
     dialect:dbConfig.dialect,
@@ -30,6 +31,8 @@ app.listen(8008,function(){
     console.log("server started at http://localhost:8008");
 })
 
+
+//Creating Products table - Works if there is no table with this name
 let Products = sequelize.define('products',{
     id:{
         type:Sequelize.INTEGER,
@@ -53,7 +56,7 @@ Products.sync().then((data)=>{
     console.log("Table Not Created Due to Some Error :- "+err);
 })
 
-
+//Getting All Products from  Products Table
 app.get('/getAllProducts',(req,res) => {
     Products.findAll({raw:true}).then((data)=>{
         res.status(200).send(data);
@@ -62,6 +65,8 @@ app.get('/getAllProducts',(req,res) => {
     })
 })
 
+
+//Get Product Based On Product Id
 app.get('/getProduct/:id',(req,res) => {
     let id = req.params.id
     Products.findByPk(id,{raw:true}).then((data) => {
@@ -70,19 +75,6 @@ app.get('/getProduct/:id',(req,res) => {
         res.status(404).send("Error Fetching PRoduct : "+err)
     })
 })
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
